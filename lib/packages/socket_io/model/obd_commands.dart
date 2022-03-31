@@ -12,7 +12,7 @@ final List<String> sensorCommands = [
 	"0106", // Short Term Fuel Trim (%)
 	"0107", // Long  Term Fuel Trim (%)
 	"010C", // RPM (revolutions per minute)
-  "010D", // SPeed in kPh
+  "010D", // Speed in kPh
   "012F", // Fuel Level (%)
 	"0133", // Barometric Pressure (kPa)
 	"0146", // Ambient Temperature (C)

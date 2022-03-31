@@ -21,16 +21,12 @@ class Dashboard extends StatelessWidget {
     late Timer _executionTimer;
 
     void _startScanTimer(int milliseconds) {
-      _executionTimer =
-          Timer.periodic(Duration(milliseconds: milliseconds), (timer) async {
-            await context.read<SocketCubit>().sendSensorCommads();
-        // await context.read<SocketCubit>().getSpeed();
-        // await context.read<SocketCubit>().getRPM();
-        // await context.read<SocketCubit>().getVolt();
-        // await context.read<SocketCubit>().getEngineLoad();        
-        // await context.read<SocketCubit>().getFuelLevel();
-        // await context.read<SocketCubit>().getCoolantTemp();
-      });
+      _executionTimer = Timer.periodic(
+        Duration(milliseconds: milliseconds),
+        (timer) async {
+          await context.read<SocketCubit>().sendSensorCommads();
+        },
+      );
       _timersStarted = true;
     }
 
@@ -105,7 +101,7 @@ class Dashboard extends StatelessWidget {
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(40.0),
-            child: AppBar(              
+            child: AppBar(
               leading: connectionIcon,
               backgroundColor: Colors.black87,
               // backgroundColor: Colors.red.withOpacity(0), // transprent
@@ -156,35 +152,35 @@ class Dashboard extends StatelessWidget {
                       min: 0,
                       max: 9000,
                       createGaugeRange: _createGaugeRange,
-                    ),                    
+                    ),
+                    PercentageGauge(
+                      label: 'FUEL LEVEL',
+                      actualValue: state.message.fuelLevel,
+                      interval: 20,
+                      min: 0,
+                      max: 100.0,
+                    ),
                     PercentageGauge(
                       label: 'ENGINE LOAD',
                       actualValue: state.message.engineLoad,
                       interval: 20,
                       min: 0,
-                      max: 100.0,                      
-                    ),                    
+                      max: 100.0,
+                    ),
                     VoltageLinearGauge(
                         label: 'VOLT',
                         actualValue: double.parse(state.message.voltage
                             .substring(0, state.message.voltage.length - 1)),
                         interval: 10,
                         min: 0,
-                        max: 14.9),
-                    PercentageGauge(
-                      label: 'FUEL LEVEL',
-                      actualValue: state.message.fuelLevel,
-                      interval: 20,
-                      min: 0,
-                      max: 100.0,                      
-                    ),
+                        max: 14.9),                    
                     TemperatureLinearGauge(
                       label: 'TEMP',
                       actualValue: state.message.temparature,
                       interval: 40,
                       min: -20,
-                      max: 180.0,                      
-                    ),                    
+                      max: 180.0,
+                    ),
                   ],
                 ),
               ),

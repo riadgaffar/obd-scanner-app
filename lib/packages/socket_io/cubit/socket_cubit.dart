@@ -58,31 +58,6 @@ class SocketCubit extends Cubit<SocketState> {
     emit(const SocketState.disconnected());
   }
 
-  Future<void> getSpeed() async {
-    await sendMessage("010D\r");
-  }
-
-  Future<void> getRPM() async {
-    await sendMessage("010C\r");
-  }
-
-  Future<void> getEngineLoad() async {
-    await sendMessage("0104\r");
-  }
-
-  Future<void> getCoolantTemp() async {
-    await sendMessage("0105\r");
-  }
-
-  Future<void> getFuelLevel() async {
-    await sendMessage("012F\r");
-  }
-
-  Future<void> getVolt() async {
-    await sendMessage("ATRV\r");
-  }
-
-
   Future<void> _resetScanner() async {
     for (var cmd in resetScanToolCommands) {
       await repository.sendMessage(cmd + '\r');      
