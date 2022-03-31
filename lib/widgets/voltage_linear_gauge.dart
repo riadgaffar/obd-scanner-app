@@ -193,7 +193,7 @@ class VoltageLinearGauge extends StatelessWidget {
                       ' '
                       '${actualValue}V : ${_batteryPercentage.toStringAsFixed(0)}%',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: _fillColor
                       ),
