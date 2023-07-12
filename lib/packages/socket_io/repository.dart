@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:obdii_scanner/packages/socket_io/model/obd_commands.dart';
 import 'package:units_converter/units_converter.dart';
 
 import 'model/ip_address.dart';
 import 'model/message.dart';
 import 'model/socket_config.dart';
+
 
 class Repository {
   late Message message;
@@ -53,16 +56,17 @@ class Repository {
     );
   }
 
-  Future<void> sendMessage(dynamic message) async {
-    _socket!.write(message);
+  Future<void> sendCommand(OBDCommand command) async {
+    final commandString = command.commandString;    
+    _socket!.write(commandString);
   }
 
   Future<void> disConnect() async {
     _socket!.close();
   }
 
-  void _parsePayload(String payload) {
-    if (payload.isEmpty) return;
+  void _parsePayload(String payload) { // TODO: use observer pattern to fan out payload
+    if (payload.isEmpty || payload == "OK") return;
     if (payload.length <= 5 && RegExp(r'^.*?\.\d+?V$').hasMatch(payload)) {
       /// voltage
       var _distiledPayload = payload.replaceAll(RegExp(r'ATRV'), '');

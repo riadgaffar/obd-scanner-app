@@ -31,176 +31,183 @@ class VoltageLinearGauge extends StatelessWidget {
         : _batteryPercentage <= 80
             ? const Color(0xffFFC93E)
             : Colors.green[400];
+    final String _showBatteryLevel = actualValue == 1.0
+        ? '0.0V : 0%'
+        : ' '
+            '${actualValue}V : ${_batteryPercentage.toStringAsFixed(0)}%';
+
     return BlocBuilder<SocketCubit, SocketState>(
       builder: (context, state) {
-        return Center(
-          child: SizedBox(
-            width: 165,
-            child: SfLinearGauge(
-              minimum: _minimum,
-              maximum: _maximum,
-              showLabels: false,
-              showTicks: false,
-              tickPosition: LinearElementPosition.cross,
-              majorTickStyle:
-                  const LinearTickStyle(color: Colors.green, length: 20),
-              minorTickStyle:
-                  const LinearTickStyle(color: Colors.red, length: 10),
-              axisTrackStyle: const LinearAxisTrackStyle(
-                  thickness: 1, color: Colors.transparent),
-              ranges: <LinearGaugeRange>[
-                LinearGaugeRange(
-                  startValue: _minimum,
-                  startWidth: 70,
-                  endWidth: 70,
-                  color: Colors.transparent,
-                  endValue: _maximum - 2,
-                  position: LinearElementPosition.cross,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.rectangle,
-                      border: Border.all(
-                          color: _brightness == Brightness.light
-                              ? const Color(0xffAAAAAA)
-                              : const Color(0xff4D4D4D),
-                          width: 4),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(12),
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(30, 0, 0, 30),
+          child: Center(
+            child: SizedBox(
+              width: 165,
+              child: SfLinearGauge(
+                minimum: _minimum,
+                maximum: _maximum,
+                showLabels: false,
+                showTicks: false,
+                tickPosition: LinearElementPosition.cross,
+                majorTickStyle:
+                    const LinearTickStyle(color: Colors.green, length: 20),
+                minorTickStyle:
+                    const LinearTickStyle(color: Colors.red, length: 10),
+                axisTrackStyle: const LinearAxisTrackStyle(
+                    thickness: 1, color: Colors.transparent),
+                ranges: <LinearGaugeRange>[
+                  LinearGaugeRange(
+                    startValue: _minimum,
+                    startWidth: 70,
+                    endWidth: 70,
+                    color: Colors.transparent,
+                    endValue: _maximum - 2,
+                    position: LinearElementPosition.cross,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        shape: BoxShape.rectangle,
+                        border: Border.all(
+                            color: _brightness == Brightness.light
+                                ? const Color(0xffAAAAAA)
+                                : const Color(0xff4D4D4D),
+                            width: 4),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(12),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                LinearGaugeRange(
-                  startValue: _minimum + 5,
-                  startWidth: 55,
-                  endWidth: 55,
-                  endValue: _batteryPercentage < _maximum / 4
-                      ? _batteryPercentage
-                      : _maximum / 4,
-                  position: LinearElementPosition.cross,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: _fillColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-                LinearGaugeRange(
-                  startValue: _batteryPercentage >= (_maximum / 4 + 2)
-                      ? (_maximum / 4 + 2)
-                      : _minimum + 5,
-                  endValue: _batteryPercentage < (_maximum / 4 + 2)
-                      ? _minimum + 5
-                      : _batteryPercentage <= _maximum / 2
-                          ? _batteryPercentage
-                          : _maximum / 2,
-                  startWidth: 55,
-                  endWidth: 55,
-                  position: LinearElementPosition.cross,
-                  edgeStyle: LinearEdgeStyle.bothFlat,
-                  rangeShapeType: LinearRangeShapeType.flat,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: _fillColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-                LinearGaugeRange(
-                  startValue: _batteryPercentage >= (_maximum / 2 + 2)
-                      ? (_maximum / 2 + 2)
-                      : _minimum + 5,
-                  endValue: _batteryPercentage < (_maximum / 2 + 2)
-                      ? _minimum + 5
-                      : _batteryPercentage <= (_maximum * 3 / 4)
-                          ? _batteryPercentage
-                          : (_maximum * 3 / 4),
-                  startWidth: 55,
-                  endWidth: 55,
-                  position: LinearElementPosition.cross,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: _fillColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-                LinearGaugeRange(
-                  startValue: _batteryPercentage >= (_maximum * 3 / 4 + 2)
-                      ? (_maximum * 3 / 4 + 2)
-                      : _minimum + 5,
-                  endValue: _batteryPercentage < (_maximum * 3 / 4 + 2)
-                      ? _minimum + 5
-                      : _batteryPercentage < _maximum
-                          ? _batteryPercentage
-                          : _maximum - 7,
-                  startWidth: 55,
-                  endWidth: 55,
-                  position: LinearElementPosition.cross,
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: _fillColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-              ],
-              markerPointers: <LinearMarkerPointer>[
-                LinearWidgetPointer(
-                  value: _maximum,
-                  enableAnimation: false,
-                  markerAlignment: LinearMarkerAlignment.start,
-                  child: Container(
-                    height: 38,
-                    width: 16,
-                    decoration: BoxDecoration(
-                      color: _brightness == Brightness.light
-                          ? Colors.transparent
-                          : const Color(0xff232323),
-                      shape: BoxShape.rectangle,
-                      border: Border.all(
-                          color: _brightness == Brightness.light
-                              ? const Color(0xffAAAAAA)
-                              : const Color(0xff4D4D4D),
-                          width: 4),
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(6),
-                        bottomRight: Radius.circular(6),
+                  LinearGaugeRange(
+                    startValue: _minimum + 5,
+                    startWidth: 55,
+                    endWidth: 55,
+                    endValue: _batteryPercentage < _maximum / 4
+                        ? _batteryPercentage
+                        : _maximum / 4,
+                    position: LinearElementPosition.cross,
+                    color: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: _fillColor,
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                   ),
-                )
-              ],
-              barPointers: <LinearBarPointer>[
-                LinearBarPointer(
-                  value: 100,
-                  thickness: 30,
-                  position: LinearElementPosition.outside,
-                  offset: 35,
-                  enableAnimation: false,
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Text(
-                      ' '
-                      '${actualValue}V : ${_batteryPercentage.toStringAsFixed(0)}%',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: _fillColor
+                  LinearGaugeRange(
+                    startValue: _batteryPercentage >= (_maximum / 4 + 2)
+                        ? (_maximum / 4 + 2)
+                        : _minimum + 5,
+                    endValue: _batteryPercentage < (_maximum / 4 + 2)
+                        ? _minimum + 5
+                        : _batteryPercentage <= _maximum / 2
+                            ? _batteryPercentage
+                            : _maximum / 2,
+                    startWidth: 55,
+                    endWidth: 55,
+                    position: LinearElementPosition.cross,
+                    edgeStyle: LinearEdgeStyle.bothFlat,
+                    rangeShapeType: LinearRangeShapeType.flat,
+                    color: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: _fillColor,
+                        borderRadius: BorderRadius.circular(4),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  LinearGaugeRange(
+                    startValue: _batteryPercentage >= (_maximum / 2 + 2)
+                        ? (_maximum / 2 + 2)
+                        : _minimum + 5,
+                    endValue: _batteryPercentage < (_maximum / 2 + 2)
+                        ? _minimum + 5
+                        : _batteryPercentage <= (_maximum * 3 / 4)
+                            ? _batteryPercentage
+                            : (_maximum * 3 / 4),
+                    startWidth: 55,
+                    endWidth: 55,
+                    position: LinearElementPosition.cross,
+                    color: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: _fillColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                  LinearGaugeRange(
+                    startValue: _batteryPercentage >= (_maximum * 3 / 4 + 2)
+                        ? (_maximum * 3 / 4 + 2)
+                        : _minimum + 5,
+                    endValue: _batteryPercentage < (_maximum * 3 / 4 + 2)
+                        ? _minimum + 5
+                        : _batteryPercentage < _maximum
+                            ? _batteryPercentage
+                            : _maximum - 7,
+                    startWidth: 55,
+                    endWidth: 55,
+                    position: LinearElementPosition.cross,
+                    color: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        color: _fillColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                ],
+                markerPointers: <LinearMarkerPointer>[
+                  LinearWidgetPointer(
+                    value: _maximum,
+                    enableAnimation: false,
+                    markerAlignment: LinearMarkerAlignment.start,
+                    child: Container(
+                      height: 38,
+                      width: 16,
+                      decoration: BoxDecoration(
+                        color: _brightness == Brightness.light
+                            ? Colors.transparent
+                            : const Color(0xff232323),
+                        shape: BoxShape.rectangle,
+                        border: Border.all(
+                            color: _brightness == Brightness.light
+                                ? const Color(0xffAAAAAA)
+                                : const Color(0xff4D4D4D),
+                            width: 4),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(6),
+                          bottomRight: Radius.circular(6),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+                barPointers: <LinearBarPointer>[
+                  LinearBarPointer(
+                    value: 100,
+                    thickness: 30,
+                    position: LinearElementPosition.outside,
+                    offset: 35,
+                    enableAnimation: false,
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Text(
+                        _showBatteryLevel,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: _fillColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );

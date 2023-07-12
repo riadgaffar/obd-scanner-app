@@ -39,18 +39,13 @@ class SocketCubit extends Cubit<SocketState> {
     }
   }
 
-  Future<void> sendMessage(dynamic message) async {    
-    await repository.sendMessage(message);
-    await Future<void>.delayed(const Duration(milliseconds: 50));
-    emit(SocketState.connected(repository.message));
-  }
-
-  Future<void> sendSensorCommads() async {
-    for (var cmd in sensorCommands) {
-      await repository.sendMessage(cmd + '\r');      
-      await Future.delayed(const Duration(milliseconds: 50));
-      emit(SocketState.connected(repository.message));
-    }
+  Future<void> refreshInstrumentCluster() async {
+    await _getRpm();
+    await _getSpeed();
+    await _getFuelLevel();
+    await _getEngineLoad();
+    await _getVoltage();
+    await _getCoolantTemp();
   }
 
   Future<void> disConnect() async {
@@ -59,10 +54,85 @@ class SocketCubit extends Cubit<SocketState> {
   }
 
   Future<void> _resetScanner() async {
-    for (var cmd in resetScanToolCommands) {
-      await repository.sendMessage(cmd + '\r');      
-      await Future.delayed(const Duration(milliseconds: 200));      
-    }
+    await _autoDetectProtocol();
+    await _doSoftReset();
+    await _turnHeaderOff();
+    await _turnHeaderOn();
+    await _describeProtocolInNumber();
   }
+
+  Future<void> _autoDetectProtocol() async {
+    await repository.sendCommand(OBDAutoProtoclDetectionCommand());
+    await _waitMs(200);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _doSoftReset() async {
+    await repository.sendCommand(OBDSoftRestCommand());
+    await _waitMs(200);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _turnHeaderOff() async {
+    await repository.sendCommand(OBDDisplayHeaderOffCommand());
+    await _waitMs(200);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _turnHeaderOn() async {
+    await repository.sendCommand(OBDDisplayHeaderOnCommand());
+    await _waitMs(200);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _describeProtocolInNumber() async {
+    await repository.sendCommand(OBDDescribeProtocolInNumberCommand());
+    await _waitMs(200);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getDtcs() async {
+    await repository.sendCommand(OBDDiagnosticTroubleCodesCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getRpm() async {
+    await repository.sendCommand(OBDDiagnosticEngineRpmCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getSpeed() async {
+    await repository.sendCommand(OBDDiagnosticVehicleSpeedCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getFuelLevel() async {
+    await repository.sendCommand(OBDDiagnosticFuelLevelCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getEngineLoad() async {
+    await repository.sendCommand(OBDDiagnosticEngineLoadCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getVoltage() async {
+    await repository.sendCommand(OBDDiagnosticVoltageCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<void> _getCoolantTemp() async {
+    await repository.sendCommand(OBDDiagnosticCoolantTempCommand());
+    await _waitMs(50);
+    emit(SocketState.connected(repository.message));
+  }
+
+  Future<dynamic> _waitMs(int ms) async => await Future.delayed(Duration(milliseconds: ms));
 }
 

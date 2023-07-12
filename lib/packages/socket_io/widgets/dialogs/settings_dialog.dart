@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:obdii_scanner/packages/socket_io/cubit/socket_cubit.dart';
@@ -36,12 +33,13 @@ class SettingsDialog extends StatelessWidget {
                 Column(
                   children: [
                     Container(
-                        child: (() {
-                      if (state.connectionStatus ==
-                          ConnectionStatus.connecting) {
-                        return const CircularProgressIndicator();
-                      }
-                    }())),
+                      child: (() {
+                        if (state.connectionStatus ==
+                            ConnectionStatus.connecting) {
+                          return const CircularProgressIndicator();
+                        }
+                      }()),
+                    ),
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 10, left: 0, right: 0),
@@ -50,8 +48,9 @@ class SettingsDialog extends StatelessWidget {
                           const Text(
                             "Host:",
                             style: TextStyle(
-                                color: Colors.lightBlueAccent,
-                                fontWeight: FontWeight.w600),
+                              color: Colors.lightBlueAccent,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(left: 2),
@@ -66,9 +65,10 @@ class SettingsDialog extends StatelessWidget {
                               width: 115,
                               child: TextField(
                                 style: const TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 14),
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 14,
+                                ),
                                 controller: ipEntryController,
                                 onChanged: (ip) =>
                                     context.read<SocketCubit>().ipChanged(ip),
@@ -103,9 +103,10 @@ class SettingsDialog extends StatelessWidget {
                                   .portNumber()
                                   .toString(),
                               style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                  fontWeight: FontWeight.w300),
+                                fontSize: 14,
+                                color: Colors.white70,
+                                fontWeight: FontWeight.w300,
+                              ),
                             ),
                           ),
                         ],

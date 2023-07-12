@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:obdii_scanner/packages/icons/custom_icons_icons.dart';
 import 'package:obdii_scanner/packages/socket_io/cubit/socket_cubit.dart';
 import 'package:obdii_scanner/packages/socket_io/widgets/dialogs/dialogs.dart';
 import 'package:obdii_scanner/widgets/dynamic_radial_gauge.dart';
@@ -24,7 +25,7 @@ class Dashboard extends StatelessWidget {
       _executionTimer = Timer.periodic(
         Duration(milliseconds: milliseconds),
         (timer) async {
-          await context.read<SocketCubit>().sendSensorCommads();
+          await context.read<SocketCubit>().refreshInstrumentCluster();
         },
       );
       _timersStarted = true;
@@ -76,8 +77,8 @@ class Dashboard extends StatelessWidget {
         {required String label, required IconData iconData}) {
       return GFButton(
         onPressed: () {},
-        icon: Icon(iconData, size: 36),
-        buttonBoxShadow: true,
+        icon: Icon(iconData, size: 46),
+        buttonBoxShadow: false,
         text: label,
         size: GFSize.SMALL,
         type: GFButtonType.transparent,
@@ -167,13 +168,16 @@ class Dashboard extends StatelessWidget {
                       min: 0,
                       max: 100.0,
                     ),
-                    VoltageLinearGauge(
-                        label: 'VOLT',
-                        actualValue: double.parse(state.message.voltage
-                            .substring(0, state.message.voltage.length - 1)),
-                        interval: 10,
-                        min: 0,
-                        max: 14.9),                    
+                    RotatedBox(
+                      quarterTurns: 3,
+                      child: VoltageLinearGauge(
+                          label: 'VOLT',
+                          actualValue: double.parse(state.message.voltage
+                              .substring(0, state.message.voltage.length - 1)),
+                          interval: 10,
+                          min: 0,
+                          max: 14.9,),
+                    ),
                     TemperatureLinearGauge(
                       label: 'TEMP',
                       actualValue: state.message.temparature,
@@ -181,20 +185,24 @@ class Dashboard extends StatelessWidget {
                       min: -20,
                       max: 180.0,
                     ),
+                    _getActionableButton(
+                        label: 'DTC', iconData: CustomIcons.check_engine),
+                    _getActionableButton(
+                        label: 'Sensors', iconData: Icons.sensors),
                   ],
                 ),
               ),
               // Expanded(
               //   child: GridView(
               //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              //         crossAxisCount: 3,
+              //         crossAxisCount: 2,
               //         crossAxisSpacing: 8,
               //         mainAxisSpacing: 4),
               //     padding: const EdgeInsets.all(8),
               //     shrinkWrap: true,
               //     children: [
-              //       _getActionableButton(
-              //           label: 'Settings', iconData: Icons.settings),
+              //       // _getActionableButton(
+              //       //     label: 'Settings', iconData: Icons.settings),
               //       _getActionableButton(
               //           label: 'DTC', iconData: CustomIcons.check_engine),
               //       _getActionableButton(
