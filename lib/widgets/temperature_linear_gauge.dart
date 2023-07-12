@@ -22,24 +22,35 @@ class TemperatureLinearGauge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double maxNormalTemperature = 100.0;
+    final Brightness brightness = Theme.of(context).brightness;
+    final Color? _tempTextColor = brightness == Brightness.dark
+                                    ? Colors.white70
+                                    : Colors.black26;
     return BlocBuilder<SocketCubit, SocketState>(
-      builder: (context, state) {
+      builder: (context, state) {        
         return Column(
           children: [
             Expanded(
               child: Center(
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 4,
+                  // height: MediaQuery.of(context).size.height,
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                     child: Padding(
-                      padding: const EdgeInsets.only(bottom: 1),
+                      padding: const EdgeInsets.only(bottom: 1, top: 5),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           /// Linear gauge to display celsius scale.
                           SfLinearGauge(
+                            axisLabelStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: brightness == Brightness.dark
+                                    ? Colors.white70
+                                    : Colors.black26,
+                            ),
                             minimum: min,
                             maximum: max,
                             interval: interval,
@@ -55,7 +66,7 @@ class TemperatureLinearGauge extends StatelessWidget {
                             labelPosition: LinearLabelPosition.outside,
                             orientation: LinearGaugeOrientation.vertical,
                             markerPointers: <LinearMarkerPointer>[
-                              LinearWidgetPointer(
+                              LinearWidgetPointer(                                
                                 markerAlignment: LinearMarkerAlignment.end,
                                 value: max, // celcius,
                                 enableAnimation: false,
@@ -66,17 +77,21 @@ class TemperatureLinearGauge extends StatelessWidget {
                                   child: Text(
                                     '°C',
                                     style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white70,
+                                    ),
                                   ),
                                 ),
                               ),
-                              LinearShapePointer(
+                              LinearShapePointer( // bottom circle
                                 value: min,
                                 markerAlignment: LinearMarkerAlignment.start,
                                 shapeType: LinearShapePointerType.circle,
                                 borderWidth: 1,
-                                borderColor: Colors.black26,
+                                borderColor: brightness == Brightness.dark
+                                    ? Colors.white70
+                                    : Colors.black26,
                                 color: Colors.white,
                                 position: LinearElementPosition.cross,
                                 width: 24,
@@ -104,9 +119,13 @@ class TemperatureLinearGauge extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     border: const Border(
                                       left: BorderSide(
-                                          width: 2.0, color: Colors.white),
+                                        width: 2.0,
+                                        color: Colors.white,
+                                      ),
                                       right: BorderSide(
-                                          width: 2.0, color: Colors.white),
+                                        width: 2.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     color: actualValue >
                                             maxNormalTemperature // celcius
@@ -158,19 +177,27 @@ class TemperatureLinearGauge extends StatelessWidget {
                           Container(
                             transform: Matrix4.translationValues(-6, 0, 0.0),
                             child: SfLinearGauge(
+                              axisLabelStyle: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                                color: brightness == Brightness.dark
+                                    ? Colors.white70
+                                    : Colors.black26,
+                              ),
                               minimum: 0,
-                              maximum: 230,
+                              maximum: 356,
                               showAxisTrack: false,
-                              interval: 60,
+                              interval: 75,
                               minorTicksPerInterval: 5,
                               axisTrackExtent: 24,
-                              axisTrackStyle:
-                                  const LinearAxisTrackStyle(thickness: 0),
+                              axisTrackStyle: const LinearAxisTrackStyle(
+                                thickness: 0,
+                              ),
                               orientation: LinearGaugeOrientation.vertical,
                               markerPointers: const <LinearMarkerPointer>[
                                 LinearWidgetPointer(
                                   markerAlignment: LinearMarkerAlignment.end,
-                                  value: 230,
+                                  value: 356,
                                   position: LinearElementPosition.inside,
                                   offset: 6,
                                   enableAnimation: false,
@@ -181,6 +208,7 @@ class TemperatureLinearGauge extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
+                                        color: Colors.white70,
                                       ),
                                     ),
                                   ),
@@ -195,32 +223,31 @@ class TemperatureLinearGauge extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  '${actualValue.roundToDouble()}°C : ',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: actualValue > maxNormalTemperature
-                        ? const Color(0xffFF7B7B)
-                        : const Color(0xff0074E3),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Times',
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 5, 23, 5),              
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    '${actualValue.roundToDouble()}°C : ',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: _tempTextColor, //Color(0xff0074E3),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Times',
+                    ),
                   ),
-                ),
-                Text(
-                  '${actualValue.toFahrenheit().roundToDouble()}°F',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: actualValue > maxNormalTemperature
-                        ? const Color(0xffFF7B7B)
-                        : const Color(0xFF00A8B5),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Times',
-                  ),
-                )
-              ],
+                  Text(
+                    '${actualValue.toFahrenheit().roundToDouble()}°F',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: _tempTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Times',
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         );

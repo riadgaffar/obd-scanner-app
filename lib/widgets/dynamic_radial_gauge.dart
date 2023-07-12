@@ -23,6 +23,7 @@ class DynamicRadialGauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightness = Theme.of(context).brightness;
     return BlocBuilder<SocketCubit, SocketState>(
       builder: (context, state) {
         return SfRadialGauge(
@@ -33,10 +34,17 @@ class DynamicRadialGauge extends StatelessWidget {
               interval: interval,
               minimum: min,
               maximum: max,
-              axisLabelStyle: const GaugeTextStyle(
-                  fontSize: 10, fontWeight: FontWeight.bold),
+              axisLabelStyle: GaugeTextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: brightness == Brightness.dark
+                                    ? Colors.white70
+                                    : Colors.black26,
+              ),
               axisLineStyle: const AxisLineStyle(
-                  thicknessUnit: GaugeSizeUnit.logicalPixel, thickness: 0.1),
+                thicknessUnit: GaugeSizeUnit.logicalPixel,
+                thickness: 0.1,
+              ),
               canScaleToFit: true,
               // radiusFactor: 0.9,
               labelOffset: 10,
@@ -44,11 +52,13 @@ class DynamicRadialGauge extends StatelessWidget {
                 length: 0.1,
                 lengthUnit: GaugeSizeUnit.factor,
                 thickness: 1.0,
+                color: Colors.white70,
               ),
               majorTickStyle: const MinorTickStyle(
                 length: 0.15,
                 lengthUnit: GaugeSizeUnit.factor,
                 thickness: 1.0,
+                color: Colors.white70,
               ),
               minorTicksPerInterval: 5,
               ranges: createGaugeRange(min, max),
@@ -80,9 +90,9 @@ class DynamicRadialGauge extends StatelessWidget {
                       actualValue.toInt().toString(),
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 15,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueGrey,
+                        color: Colors.white70,
                       ),
                     ),
                     angle: 90,
@@ -92,8 +102,9 @@ class DynamicRadialGauge extends StatelessWidget {
                     label,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey,
                     ),
                   ),
                   angle: 90,
