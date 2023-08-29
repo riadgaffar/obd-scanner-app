@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:obdii_scanner/packages/socket_io/model/obd_commands.dart';
-import 'package:units_converter/units_converter.dart';
 
 import 'model/ip_address.dart';
 import 'model/message.dart';
 import 'model/socket_config.dart';
+import 'utils/constants.dart' as constants;
 
 
-class Repository {
+class Repository {  
   late Message message;
   Socket? _socket;
   SocketConfig _socketConfig = const SocketConfig();
@@ -29,9 +29,7 @@ class Repository {
 
   Future<void> connectWithIpAndPort() async {
     _socket =
-        await Socket.connect(_socketConfig.ipAddress.value, _socketConfig.port, timeout: const Duration(seconds: 2));
-    print(
-        'Connected to: ${_socket!.remoteAddress.address}:${_socket!.remotePort}');
+        await Socket.connect(_socketConfig.ipAddress.value, _socketConfig.port, timeout: const Duration(seconds: constants.Wait.threeSec));    
     _socket!.listen(
       (List<int> event) async {
         String receivedMessage =
@@ -44,12 +42,10 @@ class Repository {
       },
       // handle errors
       onError: (error) {
-        print(error);
         _socket!.destroy();
       },
       // handle server ending connection
       onDone: () {
-        print('Server left.');
         _socket!.destroy();
         initialize();
       },

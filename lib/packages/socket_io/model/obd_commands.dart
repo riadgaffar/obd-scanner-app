@@ -50,7 +50,7 @@ enum Command {
   softReset("ATWS\r"),          // Perform soft reset or warm start
   displayHeaderOff("ATE0\r"),   // Data output with display headers turned off
   displayHeaderOn("ATH1\r"),    // Data output with display headers turned on
-  protocolInNumber("ATDPN\n");  // Describes the protocol by number
+  protocolInNumber("ATDPN\r");  // Describes the protocol by number
 
   
   final String value;
