@@ -23,6 +23,8 @@ samples, guidance on mobile development, and a full API reference.
 No tests are implemented yet. This app will be refactored using TDD and Clean Architecture pattern at a later date.
 
 ## Demo
-![](assets/images/readme/Simulator_Phone_14_Pro_Max.mp4.gif)
+[iPhone14 Simulator]((assets/images/readme/Simulator_Phone_14_Pro_Max.mp4))
+
+
 
 
