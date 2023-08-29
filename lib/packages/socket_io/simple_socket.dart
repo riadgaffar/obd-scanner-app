@@ -24,8 +24,6 @@ class SimpleSocketManager with ChangeNotifier {
   Future<void> connect(String ipAddress, int port) async {
     socket = await Socket.connect(ipAddress, port);
 
-    print('Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
-
     socket.listen(
       // handle data from the server
       (List<int> event) async {
@@ -33,19 +31,15 @@ class SimpleSocketManager with ChangeNotifier {
         if (parsedMessage.length >= 4) {
           receivedMessage = utf8.decode(event).replaceAll(RegExp('[^A-Za-z0-9.]'), '');
         }
-        print("Socket parsedMessage: $parsedMessage");
-        print("Socket receivedMessage: $receivedMessage");
       },
       // handle errors
       onError: (error) {
-        connected = false;
-        print(error);
+        connected = false;        
         socket.destroy();
       },
       // handle server ending connection
       onDone: () {
-        connected = false;
-        print('Server left.');
+        connected = false;        
         socket.destroy();
       },
     );
