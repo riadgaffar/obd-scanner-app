@@ -62,7 +62,7 @@ class SocketCubit extends Cubit<SocketState> {
   }
 
   Future<void> _autoDetectProtocol() async {
-    await repository.sendCommand(OBDAutoProtoclDetectionCommand());
+    await repository.sendCommand(OBDAutoProtocolDetectionCommand());
     await _waitMs(200);
     emit(SocketState.connected(repository.message));
   }

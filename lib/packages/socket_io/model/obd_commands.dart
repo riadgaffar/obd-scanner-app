@@ -46,7 +46,7 @@ enum Command {
 	fuelRate("015E\r"),           // Fuel Rate (L/h)
 	torque("0163\r"),             // Torque (Nm)
   voltage("ATRV\r"),            // Voltage
-  protolDetection("ATSP0\r"),   // Auto protocol detection
+  protocolDetection("ATSP0\r"),   // Auto protocol detection
   softReset("ATWS\r"),          // Perform soft reset or warm start
   displayHeaderOff("ATE0\r"),   // Data output with display headers turned off
   displayHeaderOn("ATH1\r"),    // Data output with display headers turned on
@@ -127,8 +127,8 @@ class OBDDiagnosticVoltageCommand extends OBDCommand {
   OBDDiagnosticVoltageCommand() : super(Command.voltage.value);
 }
 
-class OBDAutoProtoclDetectionCommand extends OBDCommand {
-  OBDAutoProtoclDetectionCommand() : super(Command.protolDetection.value);
+class OBDAutoProtocolDetectionCommand extends OBDCommand {
+  OBDAutoProtocolDetectionCommand() : super(Command.protocolDetection.value);
 }
 
 class OBDSoftRestCommand extends OBDCommand {
