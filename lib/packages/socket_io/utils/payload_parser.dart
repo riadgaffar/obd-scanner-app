@@ -1,14 +1,11 @@
 import 'package:obdii_scanner/packages/socket_io/model/message.dart';
 
-enum PIDs {
-  rpm('410C'),
-  speed('410D'),
-  engineLoad('4104'),
-  temperature('4105'),
-  fuelLevel('412F');
-
-  final String value;
-  const PIDs(this.value);
+enum PID {
+  speed, // For 410D
+  rpm, // For 410C
+  engineLoad, // For 4104
+  temperature, // For 4105
+  fuelLevel, // For 412F
 }
 
 class PayloadParser {
@@ -16,67 +13,73 @@ class PayloadParser {
   Use a more modular approach to use a Map or Dictionary to associate each PID
   (Parameter ID) with a specific parsing extension function.
   */
-  final Map<String, Function(String)> _parsers = {
-    PIDs.speed.value: (String data) => data.toMiles(),
-    PIDs.rpm.value: (String data) => data.toRPM(),
-    PIDs.engineLoad.value: (String data) => data.toPercentage(),
-    PIDs.temperature.value: (String data) => data.toTemperature(),
-    PIDs.fuelLevel.value: (String data) => data.toPercentage(),
+  final Map<PID, Function(String)> _parsers = {
+    PID.speed: (String data) => data.toMiles(),
+    PID.rpm: (String data) => data.toRPM(),
+    PID.engineLoad: (String data) => data.toPercentage(),
+    PID.temperature: (String data) => data.toTemperature(),
+    PID.fuelLevel: (String data) => data.toPercentage(),
   };
 
   Message parsePayload(Message message, String payload) {
-    if (payload.isNotEmpty && payload.length > 4) {
-      if (RegExp(r'^.*?\.\d+?V$').hasMatch(payload)) {
-        /// voltage
-        var distilledPayload = payload.replaceAll(RegExp(r'ATRV'), '');
-        if (distilledPayload.isNotEmpty) {
-          message = message.copyWith(voltage: distilledPayload);
-        }
-      } else {
-        var segments = RegExp(r'7E[89A-F0-9]{2}')
-            .allMatches(payload)
-            .map((m) => m.start)
-            .toList().reversed.toList();
+    if (payload.isEmpty) return message;
 
+    if (RegExp(r'\.\d+V$').hasMatch(payload)) {
+      return _parseVoltage(message, payload);
+    } else {
+      return _parsePIDData(message, payload);
+    }
+  }
 
-        for (var i = 0; i < segments.length; i++) {
-          // Calculate the start and end positions of each segment
-          var start = segments[i];
-          var end = i == 0 ? payload.length : segments[i - 1];
-          var segment = payload.substring(start, end);
+  Message _parseVoltage(Message message, String payload) {
+    var distilledPayload = payload.replaceAll('ATRV', '');
+    return distilledPayload.isNotEmpty
+        ? message.copyWith(voltage: distilledPayload)
+        : message;
+  }
 
-          if (segment.length >= 6) {
-            // var pid = segment.substring(2, 6);
-            var pid = segment.substring(5, 9);
-            var data = segment.substring(9);
-            // Use the map to find the appropriate parsing function
-            var parser = _parsers[pid];
-            if (parser != null) {
-              var parsedValue = parser(data);
-              // Update the message object based on the PID
-              switch (pid) {
-                case '410D':
-                  message = message.copyWith(speed: parsedValue!);
-                  break;
-                case '410C':
-                  message = message.copyWith(rpm: parsedValue!);
-                  break;
-                case '4104':
-                  message = message.copyWith(engineLoad: parsedValue!);
-                  break;
-                case '4105':
-                  message = message.copyWith(temperature: parsedValue!);
-                  break;
-                case '412F':
-                  message = message.copyWith(fuelLevel: parsedValue!);
-                  break;
-              }
-            }
-          }
-        }
+  Message _parsePIDData(Message message, String payload) {
+    var segments = RegExp(r'7E[89A-F0-9]{2}')
+        .allMatches(payload)
+        .map((m) => m.start)
+        .toList()
+        .reversed;
+
+    for (var i = 0; i < segments.length; i++) {
+      var end = i == 0 ? payload.length : segments.elementAt(i - 1);
+      var segment = payload.substring(segments.elementAt(i), end);
+
+      if (segment.length >= 9) {
+        var pidString = segment.substring(5, 9);
+        var data = segment.substring(9);
+        var pid = PID.values.firstWhere((e) => e.pidString == pidString);
+                
+        var parsedValue = _parsers[pid]?.call(data);
+        message = _updateMessage(message, pid, parsedValue);
       }
     }
 
+    return message;
+  }
+
+  Message _updateMessage(Message message, PID pid, double? value) {
+    switch (pid) {
+      case PID.speed:
+        message = message.copyWith(speed: value!);
+        break;
+      case PID.rpm:
+        message = message.copyWith(rpm: value!);
+        break;
+      case PID.engineLoad:
+        message = message.copyWith(engineLoad: value!);
+        break;
+      case PID.temperature:
+        message = message.copyWith(temperature: value!);
+        break;
+      case PID.fuelLevel:
+        message = message.copyWith(fuelLevel: value!);
+        break;
+    }
     return message;
   }
 }
@@ -93,4 +96,21 @@ extension on String {
   double toTemperature() => (int.parse(this, radix: 16) - 40);
 
   double toPercentage() => ((int.parse(this, radix: 16) / 255) * 100);
+}
+
+extension PIDExtension on PID {
+  String get pidString {
+    switch (this) {
+      case PID.speed:
+        return '410D';
+      case PID.rpm:
+        return '410C';
+      case PID.engineLoad:
+        return '4104';
+      case PID.temperature:
+        return '4105';
+      case PID.fuelLevel:
+        return '412F';
+    }
+  }
 }
