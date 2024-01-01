@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:obdii_scanner/packages/icons/custom_icons_icons.dart';
 import 'package:obdii_scanner/packages/socket_io/cubit/socket_cubit.dart';
 import 'package:obdii_scanner/packages/socket_io/widgets/dialogs/dialogs.dart';
@@ -7,10 +10,6 @@ import 'package:obdii_scanner/widgets/dynamic_radial_gauge.dart';
 import 'package:obdii_scanner/widgets/percentage_gauge.dart';
 import 'package:obdii_scanner/widgets/temperature_linear_gauge.dart';
 import 'package:obdii_scanner/widgets/voltage_linear_gauge.dart';
-import 'package:getwidget/getwidget.dart';
-
-import 'dart:async';
-
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class Dashboard extends StatelessWidget {
@@ -180,7 +179,7 @@ class Dashboard extends StatelessWidget {
                     ),
                     TemperatureLinearGauge(
                       label: 'TEMP',
-                      actualValue: state.message.temparature,
+                      actualValue: state.message.temperature,
                       interval: 40,
                       min: -20,
                       max: 180.0,

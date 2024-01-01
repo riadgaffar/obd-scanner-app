@@ -6,7 +6,7 @@ class Message extends Equatable {
   final double speed;
   final double rpm;
   final double engineLoad;
-  final double temparature;
+  final double temperature;
   final double fuelLevel;  
 
   const Message({
@@ -15,18 +15,18 @@ class Message extends Equatable {
     this.rpm = 0.0,
     this.engineLoad = 0.0,    
     this.fuelLevel = 0.0, 
-    this.temparature = -17.7,   
+    this.temperature = -17.7,   
   });
 
   @override  
-  List<Object?> get props => [voltage, speed, rpm, engineLoad, fuelLevel, temparature];
+  List<Object?> get props => [voltage, speed, rpm, engineLoad, fuelLevel, temperature];
 
   Message copyWith({
     String? voltage,
     double? speed,
     double? rpm,
     double? engineLoad,
-    double? temparature,
+    double? temperature,
     double? fuelLevel,
   }) {
     return Message(
@@ -35,7 +35,7 @@ class Message extends Equatable {
       rpm: rpm ?? this.rpm,
       engineLoad: engineLoad ?? this.engineLoad,
       fuelLevel: fuelLevel ?? this.fuelLevel,
-      temparature: temparature ?? this.temparature,
+      temperature: temperature ?? this.temperature,
     );
   }
 }
