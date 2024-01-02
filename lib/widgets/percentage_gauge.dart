@@ -5,13 +5,13 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class PercentageGauge extends StatelessWidget {
   const PercentageGauge({
-    Key? key,
+    super.key,
     required this.label,
     required this.actualValue,
     required this.interval,
     required this.min,
     required this.max,
-  }) : super(key: key);
+  });
 
   final String label;
   final double actualValue;
@@ -55,7 +55,7 @@ class PercentageGauge extends StatelessWidget {
                       ? Colors.white70
                       : Colors.black26,
                 ),
-                minorTicksPerInterval: 5,
+                minorTicksPerInterval: 4,
                 pointers: <GaugePointer>[
                   NeedlePointer(
                     animationType: AnimationType.ease,

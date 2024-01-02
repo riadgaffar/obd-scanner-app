@@ -23,7 +23,7 @@ class PayloadParser {
   };
 
   Message parsePayload(Message message, String payload) {
-    if (payload.isEmpty) return message;
+    if (payload.isEmpty || RegExp(r'\d+\.\d$').hasMatch(payload)) return message;
 
     if (RegExp(r'\.\d+V$').hasMatch(payload)) {
       return _parseVoltage(message, payload);

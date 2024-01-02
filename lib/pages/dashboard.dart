@@ -142,7 +142,7 @@ class Dashboard extends StatelessWidget {
                       actualValue: state.message.speed,
                       interval: 20,
                       min: 0,
-                      max: 200,
+                      max: 201,
                       createGaugeRange: _createGaugeRange,
                     ),
                     DynamicRadialGauge(
@@ -150,7 +150,7 @@ class Dashboard extends StatelessWidget {
                       actualValue: state.message.rpm,
                       interval: 1000,
                       min: 0,
-                      max: 9000,
+                      max: 9001,
                       createGaugeRange: _createGaugeRange,
                     ),
                     PercentageGauge(

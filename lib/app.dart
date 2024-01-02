@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:obdii_scanner/packages/socket_io/cubit/socket_cubit.dart';
 import 'package:obdii_scanner/packages/socket_io/repository.dart';
+
 import 'pages/dashboard.dart';
 
 class App extends StatelessWidget {
@@ -15,7 +16,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "OBD Scanner",
-      theme: ThemeData.dark(),      
+      theme: ThemeData.dark(),
       home: Scaffold(
         resizeToAvoidBottomInset: true,
         body: BlocProvider(

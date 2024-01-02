@@ -5,13 +5,13 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class VoltageLinearGauge extends StatelessWidget {
   const VoltageLinearGauge({
-    Key? key,
+    super.key,
     required this.label,
     required this.actualValue,
     required this.interval,
     required this.min,
     required this.max,
-  }) : super(key: key);
+  });
 
   final String label;
   final double actualValue;
