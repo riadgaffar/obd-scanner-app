@@ -23,11 +23,11 @@ class TemperatureLinearGauge extends StatelessWidget {
   Widget build(BuildContext context) {
     const double maxNormalTemperature = 100.0;
     final Brightness brightness = Theme.of(context).brightness;
-    final Color? _tempTextColor = brightness == Brightness.dark
+    final Color tempTextColor = brightness == Brightness.dark
                                     ? Colors.white70
                                     : Colors.black26;
     return BlocBuilder<SocketCubit, SocketState>(
-      builder: (context, state) {        
+      builder: (context, state) {
         return Column(
           children: [
             Expanded(
@@ -232,7 +232,7 @@ class TemperatureLinearGauge extends StatelessWidget {
                     '${actualValue.roundToDouble()}°C : ',
                     style: TextStyle(
                       fontSize: 18,
-                      color: _tempTextColor, //Color(0xff0074E3),
+                      color: tempTextColor, //Color(0xff0074E3),
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Times',
                     ),
@@ -241,7 +241,7 @@ class TemperatureLinearGauge extends StatelessWidget {
                     '${actualValue.toFahrenheit().roundToDouble()}°F',
                     style: TextStyle(
                       fontSize: 18,
-                      color: _tempTextColor,
+                      color: tempTextColor,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Times',
                     ),
