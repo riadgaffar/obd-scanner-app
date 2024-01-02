@@ -5,7 +5,8 @@ enum PID {
   rpm, // For 410C
   engineLoad, // For 4104
   temperature, // For 4105
-  fuelLevel, // For 412F
+  fuelLevel, // For 412F,
+  none
 }
 
 class PayloadParser {
@@ -52,10 +53,12 @@ class PayloadParser {
       if (segment.length >= 9) {
         var pidString = segment.substring(5, 9);
         var data = segment.substring(9);
-        var pid = PID.values.firstWhere((e) => e.pidString == pidString);
-                
-        var parsedValue = _parsers[pid]?.call(data);
-        message = _updateMessage(message, pid, parsedValue);
+        var pid = PID.values.firstWhere((e) => e.pidString == pidString, orElse: () => PID.none);
+
+        if (pid != PID.none) {
+          var parsedValue = _parsers[pid]?.call(data);
+          message = _updateMessage(message, pid, parsedValue);
+        }
       }
     }
 
@@ -78,6 +81,8 @@ class PayloadParser {
         break;
       case PID.fuelLevel:
         message = message.copyWith(fuelLevel: value!);
+        break;
+      default:
         break;
     }
     return message;
@@ -111,6 +116,8 @@ extension PIDExtension on PID {
         return '4105';
       case PID.fuelLevel:
         return '412F';
+      case PID.none:
+        return '';
     }
   }
 }

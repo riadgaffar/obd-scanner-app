@@ -191,24 +191,6 @@ class Dashboard extends StatelessWidget {
                   ],
                 ),
               ),
-              // Expanded(
-              //   child: GridView(
-              //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              //         crossAxisCount: 2,
-              //         crossAxisSpacing: 8,
-              //         mainAxisSpacing: 4),
-              //     padding: const EdgeInsets.all(8),
-              //     shrinkWrap: true,
-              //     children: [
-              //       // _getActionableButton(
-              //       //     label: 'Settings', iconData: Icons.settings),
-              //       _getActionableButton(
-              //           label: 'DTC', iconData: CustomIcons.check_engine),
-              //       _getActionableButton(
-              //           label: 'Sensors', iconData: Icons.sensors),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         );

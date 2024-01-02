@@ -1,6 +1,7 @@
 # Miscellaneous
 *.class
 *.log
+*.log.*
 *.pyc
 *.swp
 .DS_Store
@@ -47,3 +48,4 @@ app.*.map.json
 pubspec.lock
 .metadata
 /windows/*
+devtools_options.yaml
